@@ -7,6 +7,16 @@ import android.os.Build;
 
 public class App extends Application {
     public static final String CHANNEL_ID = "exampleServiceChannel";
+    public boolean connected=false;
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -118,32 +118,37 @@ public class BleTestService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        String deviceg = intent.getStringExtra("bluetooth_device");
+        if(intent!=null) {
+            String deviceg = intent.getStringExtra("bluetooth_device");
 
 
 //        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //
 //        connectToDevice(deviceg);
 
-        mAdapter = BluetoothAdapter.getDefaultAdapter();
-        mState = STATE_NONE;
-        mNewState = mState;
-       // mHandler = handler;
+            mAdapter = BluetoothAdapter.getDefaultAdapter();
+            mState = STATE_NONE;
+            mNewState = mState;
+            // mHandler = handler;
 
 
-
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0);
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Example Service")
-                .setContentText("input")
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentIntent(pendingIntent)
-                .build();
-        startForeground(1, notification);
-        BluetoothDevice device = mAdapter.getRemoteDevice("80:6C:1B:84:C8:DC");
-        connect(device,true);
+            Intent notificationIntent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                    0, notificationIntent, 0);
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("Example Service")
+                    .setContentText("input")
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentIntent(pendingIntent)
+                    .build();
+            startForeground(1, notification);
+            BluetoothDevice device = mAdapter.getRemoteDevice("80:6C:1B:84:C8:DC");
+            connect(device, true);
+        }
+        else{
+            stopForeground(true);
+            stopSelf();
+        }
         return START_STICKY;
     }
 
@@ -410,6 +415,7 @@ public class BleTestService extends Service {
                 try {
                     // This is a blocking call and will only return on a
                     // successful connection or an exception
+                    if (socket!=null)
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
                     Log.e(TAG, "Socket Type: " + mSocketType + "accept() failed", e);
